@@ -37,7 +37,7 @@ const dataForSEOClient = new DataForSEOClient(dataForSEOConfig);
 console.error('DataForSEO client initialized');
 
 // Parse enabled modules from environment
-const enabledModules = EnabledModulesSchema.parse(process.env.ENABLED_MODULES);
+const enabledModules = EnabledModulesSchema.parse(process.env.ENABLED_MODULES ?? JSON.stringify(defaultEnabledModules));
 
 // Initialize modules
 const modules: BaseModule[] = [];
@@ -86,22 +86,24 @@ function registerModuleTools() {
 registerModuleTools();
 console.error('Tools registered');
 
-// Start the server
+// Export agent config for HTTP server
+export const agentConfig = {
+  server,
+  port: parseInt(process.env.PORT || "5678"),
+  transport: "http",
+};
+
+// Start the server if running in CLI mode (stdio)
 async function main() {
   const transport = new StdioServerTransport(); 
-  console.error('Starting server');
+  console.error('Starting server (stdio mode)');
   await server.connect(transport);
   console.error("DataForSEO MCP Server running on stdio");
 }
 
-main().catch((error) => {
-  console.error("Fatal error in main():", error);
-  process.exit(1);
-});
-
-// Export required config for index.http.ts
-export const agentConfig = {
-  name: "dataforseo",
-  version: "1.0.0",
-  modules: defaultEnabledModules,
-};
+if (require.main === module) {
+  main().catch((error) => {
+    console.error("Fatal error in main():", error);
+    process.exit(1);
+  });
+}
