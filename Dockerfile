@@ -1,20 +1,20 @@
-# Usa l'immagine Node.js ufficiale
 FROM node:20
 
-# Crea directory di lavoro
 WORKDIR /app
 
-# Copia tutti i file nel container
 COPY . .
 
-# Installa le dipendenze, incluse quelle da GitHub
+# Installa il pacchetto dal repo GitHub
+RUN npm install @modelcontextprotocol/sdk@github:modelcontextprotocol/typescript-sdk
+
+# Installa le restanti dipendenze
 RUN npm install
 
-# Compila TypeScript
+# Compila il progetto
 RUN npm run build
 
-# Espone la porta HTTP MCP
+# Espone la porta per l'HTTP MCP
 EXPOSE 5678
 
-# Comando di avvio: esegue il server MCP in modalità HTTP
+# Avvia il server MCP in modalità HTTP
 CMD ["npm", "run", "http"]
