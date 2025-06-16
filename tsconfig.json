@@ -1,14 +1,12 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-"module": "esnext",
+    "module": "esnext",
     "outDir": "dist",
     "rootDir": ".",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
-  "include": [
-    "src/**/*",
-    "index.http.ts"
-  ]
+  "include": ["src/**/*", "index.http.ts"]
 }
