@@ -6,6 +6,8 @@ COPY . .
 
 RUN npm install
 
+RUN npm run build
+
 EXPOSE 5678
 
 CMD ["npm", "run", "http"]
