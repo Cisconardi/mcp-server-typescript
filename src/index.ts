@@ -12,7 +12,7 @@ import { z } from 'zod';
 import { BacklinksApiModule } from "./modules/backlinks/backlinks-api.module.js";7
 import { BusinessDataApiModule } from "./modules/business-data-api/business-data-api.module.js";
 import { DomainAnalyticsApiModule } from "./modules/domain-analytics/domain-analytics-api.module.js";
-
+export const agentConfig = config;
 interface ToolDefinition {
   description: string;
   params: z.ZodRawShape;
