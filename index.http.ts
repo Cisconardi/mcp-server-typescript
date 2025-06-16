@@ -1,7 +1,6 @@
-// index.http.ts
 import express from 'express';
 import dotenv from 'dotenv';
-import { agentConfig } from './src/index';
+import { agentConfig } from './src/index'; // se lo hai esportato
 
 dotenv.config();
 const app = express();
@@ -14,7 +13,7 @@ app.post('/', async (req, res) => {
     const input = req.body?.input || {};
     const output = await agentConfig.tools[0].invoke(input.query);
     res.json({ output });
-  } catch (err) {
+  } catch (err: any) {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
