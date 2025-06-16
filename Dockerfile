@@ -7,11 +7,8 @@ WORKDIR /app
 # Copia tutti i file nel container
 COPY . .
 
-# Installa dipendenze (in un solo passaggio per caching)
-RUN npm install --production
-
-# Installa dotenv per la configurazione degli env
-RUN npm install dotenv
+# Installa le dipendenze, incluse quelle da GitHub
+RUN npm install
 
 # Compila TypeScript
 RUN npm run build
