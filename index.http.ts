@@ -12,16 +12,14 @@ app.use(express.json());
 app.post('/', async (req, res) => {
   try {
     const input = req.body?.input || {};
-    const agent = agentConfig;
-
-    const output = await agent.tools[0].invoke(input.query); // usa il primo tool
+    const output = await agentConfig.tools[0].invoke(input.query);
     res.json({ output });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
   }
 });
 
 app.listen(port, () => {
-  console.log(`✅ HTTP MCP Server running on port ${port}`);
+  console.log(`✅ MCP HTTP Server running on port ${port}`);
 });
