@@ -21,27 +21,18 @@ interface ToolDefinition {
 
 console.error('Starting DataForSEO MCP Server...');
 
-// Create server instance
-const server = new McpServer({
-  name: "dataforseo",
-  version: "1.0.0",
-});
-
-// Initialize DataForSEO client
+// Configurazione client
 const dataForSEOConfig: DataForSEOConfig = {
   username: process.env.DATAFORSEO_USERNAME || "",
   password: process.env.DATAFORSEO_PASSWORD || "",
 };
-
 const dataForSEOClient = new DataForSEOClient(dataForSEOConfig);
 console.error('DataForSEO client initialized');
 
-// Parse enabled modules from environment
-const enabledModules = EnabledModulesSchema.parse(
-  process.env.ENABLED_MODULES ?? JSON.stringify(defaultEnabledModules)
-);
+// Parse dei moduli abilitati
+const enabledModules = EnabledModulesSchema.parse(process.env.ENABLED_MODULES || defaultEnabledModules);
 
-// Initialize modules
+// Inizializza moduli
 const modules: BaseModule[] = [];
 
 if (isModuleEnabled('SERP', enabledModules)) {
@@ -67,8 +58,8 @@ if (isModuleEnabled('DOMAIN_ANALYTICS', enabledModules)) {
 }
 console.error('Modules initialized');
 
-// Register tools from modules
-function registerModuleTools() {
+// Registrazione strumenti
+function registerModuleTools(server: McpServer) {
   modules.forEach(module => {
     const tools = module.getTools();
     Object.entries(tools).forEach(([name, tool]) => {
@@ -84,28 +75,24 @@ function registerModuleTools() {
   });
 }
 
-// Register all tools
-registerModuleTools();
-console.error('Tools registered');
-
-// Export agent config for HTTP server
+// Configurazione esportata
 export const agentConfig = {
-  server,
-  port: parseInt(process.env.PORT || "5678"),
-  transport: "http",
+  name: "dataforseo",
+  version: "1.0.0",
+  setup: async (server: McpServer) => {
+    registerModuleTools(server);
+  }
 };
 
-// Start the server if running in CLI mode (stdio)
-async function main() {
-  const transport = new StdioServerTransport(); 
-  console.error('Starting server (stdio mode)');
-  await server.connect(transport);
-  console.error("DataForSEO MCP Server running on stdio");
-}
+// Esecuzione diretta solo in modalità CLI (stdio)
+if (import.meta.url.endsWith(process.argv[1])) {
+  const server = new McpServer(agentConfig);
+  const transport = new StdioServerTransport();
 
-if (require.main === module) {
-  main().catch((error) => {
-    console.error("Fatal error in main():", error);
+  server.connect(transport).then(() => {
+    console.error("✅ MCP Server running via stdio");
+  }).catch((error) => {
+    console.error("❌ Fatal error:", error);
     process.exit(1);
   });
 }
