@@ -9,10 +9,10 @@ import { DataForSEOLabsApi } from './modules/dataforseo-labs/dataforseo-labs-api
 import { EnabledModulesSchema, isModuleEnabled, defaultEnabledModules } from './config/modules.config.js';
 import { BaseModule } from './modules/base.module.js';
 import { z } from 'zod';
-import { BacklinksApiModule } from "./modules/backlinks/backlinks-api.module.js";7
+import { BacklinksApiModule } from "./modules/backlinks/backlinks-api.module.js";
 import { BusinessDataApiModule } from "./modules/business-data-api/business-data-api.module.js";
 import { DomainAnalyticsApiModule } from "./modules/domain-analytics/domain-analytics-api.module.js";
-export const agentConfig = config;
+
 interface ToolDefinition {
   description: string;
   params: z.ZodRawShape;
@@ -98,3 +98,10 @@ main().catch((error) => {
   console.error("Fatal error in main():", error);
   process.exit(1);
 });
+
+// Export required config for index.http.ts
+export const agentConfig = {
+  name: "dataforseo",
+  version: "1.0.0",
+  modules: defaultEnabledModules,
+};
