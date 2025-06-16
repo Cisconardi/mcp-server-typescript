@@ -37,7 +37,9 @@ const dataForSEOClient = new DataForSEOClient(dataForSEOConfig);
 console.error('DataForSEO client initialized');
 
 // Parse enabled modules from environment
-const enabledModules = EnabledModulesSchema.parse(process.env.ENABLED_MODULES ?? JSON.stringify(defaultEnabledModules));
+const enabledModules = EnabledModulesSchema.parse(
+  process.env.ENABLED_MODULES ?? JSON.stringify(defaultEnabledModules)
+);
 
 // Initialize modules
 const modules: BaseModule[] = [];
