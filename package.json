@@ -6,14 +6,11 @@
   "bin": {
     "dataforseo-mcp-server": "./build/cli.js"
   },
-  "scripts": {
-    "build": "tsc && node -e \"require('fs').chmodSync('build/cli.js', '755')\"",
-    "start": "node build/index.js",
-    "dev": "tsc --watch",
-    "prepare": "npm run build",
-    "http": "node build/index-http.js",
-    "sse": "node build/index-sse-http.js"
-  },
+"scripts": {
+  "start": "node build/index.js",
+  "dev": "ts-node-dev src/index.ts",
+  "http": "ts-node index.http.ts"
+},
   "files": [
     "build"
   ],
