@@ -1,24 +1,16 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import { agentConfig } from './src/index'; // se lo hai esportato
+#!/usr/bin/env node
+import { McpHttpServer } from "@modelcontextprotocol/sdk/server/mcp-http.js";
+import { agentConfig } from "./index.js";
 
-dotenv.config();
-const app = express();
-const port = process.env.PORT || 5678;
+const port = parseInt(process.env.PORT || "5678", 10);
 
-app.use(express.json());
+async function main() {
+  const server = new McpHttpServer(agentConfig);
+  await server.listen(port);
+  console.error(`✅ MCP HTTP Server running on port ${port}`);
+}
 
-app.post('/', async (req, res) => {
-  try {
-    const input = req.body?.input || {};
-    const output = await agentConfig.tools[0].invoke(input.query);
-    res.json({ output });
-  } catch (err: any) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.listen(port, () => {
-  console.log(`✅ MCP HTTP Server running on port ${port}`);
+main().catch((error) => {
+  console.error("Fatal error in index.http.ts:", error);
+  process.exit(1);
 });
