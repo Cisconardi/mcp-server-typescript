@@ -7,10 +7,10 @@
     "dataforseo-mcp-server": "./build/cli.js"
   },
 "scripts": {
-  "start": "node build/index.js",
-  "dev": "ts-node-dev src/index.ts",
   "build": "tsc",
-  "http": "node dist/index.http.js"
+  "start": "node dist/index.js",
+  "http": "node dist/index.http.js",
+  "dev": "ts-node-dev src/index.ts"
 },
   "files": [
     "build"
