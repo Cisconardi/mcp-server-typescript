@@ -9,7 +9,7 @@
 "scripts": {
   "build": "tsc",
   "start": "node dist/index.js",
-  "http": "node dist/index.http.js",
+  "http": "ts-node index.http.ts",
   "dev": "ts-node-dev src/index.ts"
 },
   "files": [
