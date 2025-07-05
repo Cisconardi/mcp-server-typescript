@@ -18,7 +18,7 @@ services:
     labels:
       # Traefik configuration per SSE
       - traefik.enable=true
-      - traefik.http.routers.dataforseo-sse.rule=Host(`${SERVICE_FQDN_DATAFORSEO}`)
+      - traefik.http.routers.dataforseo-sse.rule=Host(`mcpserverdataforseo.116.203.156.198.sslip.io`)
       - traefik.http.routers.dataforseo-sse.tls.certresolver=letsencrypt
       - traefik.http.services.dataforseo-sse.loadbalancer.server.port=3000
       
