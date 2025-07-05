@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  dataforseo-mcp-sse:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    ports:
+      - "3000:3000"
+    
+    environment:
+      - NODE_ENV=production
+      # Credenziali DataForSEO
+      - DATAFORSEO_USERNAME=${DATAFORSEO_USERNAME}
+      - DATAFORSEO_PASSWORD=${DATAFORSEO_PASSWORD}
+    
+    labels:
+      # Traefik configuration per SSE
+      - traefik.enable=true
+      - traefik.http.routers.dataforseo-sse.rule=Host(`${SERVICE_FQDN_DATAFORSEO}`)
+      - traefik.http.routers.dataforseo-sse.tls.certresolver=letsencrypt
+      - traefik.http.services.dataforseo-sse.loadbalancer.server.port=3000
+      
+      # CORS headers per MCP
+      - traefik.http.middlewares.dataforseo-cors.headers.accesscontrolalloworigin=*
+      - traefik.http.middlewares.dataforseo-cors.headers.accesscontrolallowmethods=GET,POST,OPTIONS
+      - traefik.http.middlewares.dataforseo-cors.headers.accesscontrolallowheaders=Content-Type,Authorization
+      - traefik.http.routers.dataforseo-sse.middlewares=dataforseo-cors
+    
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    restart: unless-stopped
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
