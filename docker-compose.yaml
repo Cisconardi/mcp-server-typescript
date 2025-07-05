@@ -22,10 +22,12 @@ services:
       - traefik.http.routers.dataforseo-sse.tls.certresolver=letsencrypt
       - traefik.http.services.dataforseo-sse.loadbalancer.server.port=3000
       
-      # CORS headers per MCP
+      # CORS headers per MCP (più permissivi)
       - traefik.http.middlewares.dataforseo-cors.headers.accesscontrolalloworigin=*
-      - traefik.http.middlewares.dataforseo-cors.headers.accesscontrolallowmethods=GET,POST,OPTIONS
-      - traefik.http.middlewares.dataforseo-cors.headers.accesscontrolallowheaders=Content-Type,Authorization
+      - traefik.http.middlewares.dataforseo-cors.headers.accesscontrolallowmethods=GET,POST,OPTIONS,PUT,DELETE
+      - traefik.http.middlewares.dataforseo-cors.headers.accesscontrolallowheaders=*
+      - traefik.http.middlewares.dataforseo-cors.headers.accesscontrolexposeheaders=*
+      - traefik.http.middlewares.dataforseo-cors.headers.accesscontrolmaxage=86400
       - traefik.http.routers.dataforseo-sse.middlewares=dataforseo-cors
     
     healthcheck:
