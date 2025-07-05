@@ -8,4 +8,4 @@ RUN npm run build
 EXPOSE 3000
 ENV NODE_ENV=production
 ENTRYPOINT ["node", "build/cli.js"]
-CMD ["http"]
+CMD ["http", "--port", "3000", "--host", "0.0.0.0"]
